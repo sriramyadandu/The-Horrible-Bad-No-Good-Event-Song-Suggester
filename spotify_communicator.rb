@@ -2,6 +2,8 @@ require "base64"
 require "dotenv"
 require 'httparty'
 require 'json'
+require_relative "musixmatch_communicator"
+include MusixMatchCommunicator
 Dotenv.load
 
 module SpotifyCommunicator
@@ -14,22 +16,25 @@ module SpotifyCommunicator
         'Authorization' => ''+ @TOKEN_TYPE + " " + @ACCESS_TOKEN
     }
 
-    def search(q, type = [], limit = 20, offset = 0, include_external = nil, market = nil)
-        return if type.length == 0
+    def search(words)
+        return if words.length == 0
         
-        # Required params
-        search_query = {
-            :q => q,
-            :type => type.join(",")
-        }
+        tracks = Array.new()
+        words.each do |word|
+            search_query = {
+                :q => word,
+                :type => 'track',
+                :limit => 3
+            }
+            response = _get(_search_path, search_query)
+            response_obj = JSON.parse(response.body, object_class: OpenStruct)
+            
+            response_obj.tracks.items.each do |track|
+                tracks.push(OpenStruct.new({:title => track.name, :artist => track.artists.first.name}))
+            end
+        end 
         
-        # Optional params
-        search_query[:limit] = limit
-        search_query[:offset] = offset
-        search_query[:include_external] = include_external unless include_external.nil?
-        search_query[:market] = market unless market.nil?
-        response = _get(_search_path, search_query)
-        puts response
+         MusixMatchCommunicator::get_lyrics(tracks)
     end
     
     def recommendations(seed_artists, seed_genres, seed_tracks)
