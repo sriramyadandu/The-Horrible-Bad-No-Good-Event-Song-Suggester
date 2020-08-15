@@ -66,15 +66,7 @@ module SpotifyCommunicator
         ENV["SPOTIFY_BASE_URL"] + "recommendations"
     end
 
-    def self._get(path, params)
-        HTTParty.get(path, :query => params, :headers => @HEADER)
-    end
-    
-    def self._post(path, payload)
-        ###
-    end
-    
-    def self_put(path:, payload:)
-        ###
+    def self._get(path, query)
+        HTTParty.get(path, :query => query, :headers => @HEADER)
     end
 end
