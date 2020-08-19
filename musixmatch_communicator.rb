@@ -18,10 +18,6 @@ module MusixMatchCommunicator
             response = _get(_matcher_lyrics_path, matcher_lyrics_query)
             response_obj = JSON.parse(response, object_class: OpenStruct)
             track.lyrics = response_obj.message.body.lyrics.lyrics_body.gsub("\n...\n\n******* This Lyrics is NOT for Commercial use *******\n(1409620512350)", "")
-            puts track.title
-            puts track.artist
-            puts track.lyrics
-            puts "\n\n\n"
         end
     end
 

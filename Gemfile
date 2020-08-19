@@ -3,4 +3,5 @@ source 'https://rubygems.org' do
     gem 'rspec'
     gem 'json'
     gem 'httparty'
+    gem 'string-similarity'
 end

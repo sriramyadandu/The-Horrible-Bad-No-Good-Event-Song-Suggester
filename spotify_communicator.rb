@@ -2,8 +2,6 @@ require "base64"
 require "dotenv"
 require 'httparty'
 require 'json'
-require_relative "musixmatch_communicator"
-include MusixMatchCommunicator
 Dotenv.load
 
 module SpotifyCommunicator
@@ -34,7 +32,7 @@ module SpotifyCommunicator
             end
         end 
         
-         MusixMatchCommunicator::get_lyrics(tracks)
+        tracks
     end
     
     def recommendations(seed_artists, seed_genres, seed_tracks)
